@@ -114,18 +114,18 @@ const AttendanceTracker: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Attendance Tracker</h1>
+    <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8 py-8">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Attendance Tracker</h1>
       
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mb-6 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Select Event
           </label>
           <select
             value={selectedEventId}
             onChange={(e) => setSelectedEventId(e.target.value)}
-            className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full md:w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
           >
             <option value="">Choose an event</option>
             {events.map(event => (
@@ -138,28 +138,28 @@ const AttendanceTracker: React.FC = () => {
       </div>
 
       {selectedEventId && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Mark Attendance</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Mark Attendance</h2>
           <div className="space-y-3">
             {users.map(user => {
               const attendanceRecord = getAttendanceStatus(user.uid);
               return (
-                <div key={user.uid} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div key={user.uid} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 border border-gray-200 dark:border-gray-600 rounded-lg space-y-3 sm:space-y-0 transition-colors duration-300">
                   <div className="flex items-center space-x-3">
                     <div className="flex-shrink-0">
-                      <div className="h-10 w-10 bg-gray-300 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-gray-700">
+                      <div className="h-10 w-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                           {(user.name || 'U').charAt(0).toUpperCase()}
                         </span>
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{user.name || 'Unknown User'}</p>
-                      <p className="text-sm text-gray-500">{user.role} • {user.email}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name || 'Unknown User'}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{user.role} • {user.email}</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 w-full sm:w-auto justify-end">
                     {attendanceRecord ? (
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                         attendanceRecord.status === 'Present' 
@@ -173,18 +173,20 @@ const AttendanceTracker: React.FC = () => {
                         <button
                           onClick={() => markAttendance(user.uid, 'Present')}
                           disabled={loading}
-                          className="flex items-center space-x-1 px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                          className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
                         >
                           <Check className="h-4 w-4" />
-                          <span>Present</span>
+                          <span className="hidden sm:inline">Present</span>
+                          <span className="sm:hidden">P</span>
                         </button>
                         <button
                           onClick={() => markAttendance(user.uid, 'Absent')}
                           disabled={loading}
-                          className="flex items-center space-x-1 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                          className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
                         >
                           <X className="h-4 w-4" />
-                          <span>Absent</span>
+                          <span className="hidden sm:inline">Absent</span>
+                          <span className="sm:hidden">A</span>
                         </button>
                       </>
                     )}

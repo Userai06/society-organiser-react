@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import SeniorDashboard from './components/Dashboard/SeniorDashboard';
@@ -24,36 +25,38 @@ const AppContent: React.FC = () => {
   const isUserSenior = ['EB', 'EC', 'Core'].includes(currentUser.role);
 
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-900">
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={
-              <ProtectedRoute>
-                {isUserSenior ? <SeniorDashboard /> : <JuniorDashboard />}
-              </ProtectedRoute>
-            } />
-            <Route path="/tasks" element={
-              <ProtectedRoute>
-                <TaskManager />
-              </ProtectedRoute>
-            } />
-            <Route path="/feedback" element={
-              <ProtectedRoute>
-                <FeedbackForm />
-              </ProtectedRoute>
-            } />
-            <Route path="/attendance" element={
-              <ProtectedRoute>
-                <AttendanceTracker />
-              </ProtectedRoute>
-            } />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-900 dark:bg-gray-900 bg-gray-50 transition-colors duration-300">
+          <Navbar />
+          <main>
+            <Routes>
+              <Route path="/" element={
+                <ProtectedRoute>
+                  {isUserSenior ? <SeniorDashboard /> : <JuniorDashboard />}
+                </ProtectedRoute>
+              } />
+              <Route path="/tasks" element={
+                <ProtectedRoute>
+                  <TaskManager />
+                </ProtectedRoute>
+              } />
+              <Route path="/feedback" element={
+                <ProtectedRoute>
+                  <FeedbackForm />
+                </ProtectedRoute>
+              } />
+              <Route path="/attendance" element={
+                <ProtectedRoute>
+                  <AttendanceTracker />
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 };
 
