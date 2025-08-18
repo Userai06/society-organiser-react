@@ -169,26 +169,26 @@ const AttendanceTracker: React.FC = () => {
                         {attendanceRecord.status}
                       </span>
                     ) : (
-                      <>
+                      <div className="flex items-center space-x-2">
                         <button
                           onClick={() => markAttendance(user.uid, 'Present')}
                           disabled={loading}
-                          className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
+                          className="flex items-center justify-center space-x-1 px-2 py-1.5 sm:px-3 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-xs sm:text-sm min-w-[60px] sm:min-w-[80px]"
                         >
                           <Check className="h-4 w-4" />
-                          <span className="hidden sm:inline">Present</span>
-                          <span className="sm:hidden">P</span>
+                          <span className="hidden xs:inline sm:inline">Present</span>
+                          <span className="xs:hidden sm:hidden">P</span>
                         </button>
                         <button
                           onClick={() => markAttendance(user.uid, 'Absent')}
                           disabled={loading}
-                          className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
+                          className="flex items-center justify-center space-x-1 px-2 py-1.5 sm:px-3 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 text-xs sm:text-sm min-w-[60px] sm:min-w-[80px]"
                         >
                           <X className="h-4 w-4" />
-                          <span className="hidden sm:inline">Absent</span>
-                          <span className="sm:hidden">A</span>
+                          <span className="hidden xs:inline sm:inline">Absent</span>
+                          <span className="xs:hidden sm:hidden">A</span>
                         </button>
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>

@@ -81,9 +81,10 @@ const TaskManager: React.FC = () => {
   const statuses = ['All', 'Upcoming', 'Today', 'Completed'];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Task Management</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Task Management</h1>
         {isUserSenior && (
           <button
             onClick={() => setShowCreateModal(true)}
@@ -96,18 +97,18 @@ const TaskManager: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
         <div className="flex items-center space-x-2 mb-4">
-          <Filter className="h-5 w-5 text-gray-600" />
-          <h3 className="text-lg font-medium text-gray-900">Filters</h3>
+          <Filter className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Filters</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Domain</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Domain</label>
             <select
               value={filters.domain}
               onChange={(e) => setFilters({ ...filters, domain: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
             >
               {domains.map(domain => (
                 <option key={domain} value={domain}>{domain}</option>
@@ -115,11 +116,11 @@ const TaskManager: React.FC = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
             <select
               value={filters.priority}
               onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
             >
               {priorities.map(priority => (
                 <option key={priority} value={priority}>{priority}</option>
@@ -127,11 +128,11 @@ const TaskManager: React.FC = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300"
             >
               {statuses.map(status => (
                 <option key={status} value={status}>{status}</option>
@@ -144,7 +145,7 @@ const TaskManager: React.FC = () => {
       {/* Tasks Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredTasks.length === 0 ? (
-          <div className="col-span-full text-center py-12 text-gray-500">
+          <div className="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
             <p>No tasks found matching your filters.</p>
           </div>
         ) : (
@@ -170,6 +171,7 @@ const TaskManager: React.FC = () => {
           }}
         />
       )}
+    </div>
     </div>
   );
 };

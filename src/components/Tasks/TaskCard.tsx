@@ -29,20 +29,20 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, canEdit, onEdit, onDelete }) 
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all duration-300">
       <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{task.title}</h3>
         {canEdit && (
           <div className="flex space-x-1">
             <button
               onClick={() => onEdit?.(task)}
-              className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
+              className="p-1 text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors"
             >
               <Edit className="h-4 w-4" />
             </button>
             <button
               onClick={() => onDelete?.(task.id)}
-              className="p-1 text-gray-500 hover:text-red-600 transition-colors"
+              className="p-1 text-gray-500 dark:text-gray-400 hover:text-red-600 transition-colors"
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -50,7 +50,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, canEdit, onEdit, onDelete }) 
         )}
       </div>
       
-      <p className="text-gray-700 mb-4">{task.description}</p>
+      <p className="text-gray-700 dark:text-gray-300 mb-4">{task.description}</p>
       
       <div className="flex flex-wrap gap-2 mb-4">
         <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(task.priority)}`}>
@@ -64,7 +64,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, canEdit, onEdit, onDelete }) 
         </span>
       </div>
       
-      <div className="space-y-2 text-sm text-gray-600">
+      <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
         <div className="flex items-center space-x-2">
           <Calendar className="h-4 w-4" />
           <span>Due: {task.dueDate.toLocaleDateString()}</span>

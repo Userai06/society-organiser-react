@@ -130,15 +130,26 @@ const SeniorDashboard: React.FC = () => {
     }
   };
 
+  const handleDeleteAnnouncement = async (announcementId: string) => {
+    if (window.confirm('Are you sure you want to delete this announcement?')) {
+      try {
+        await deleteDoc(doc(db, 'announcements', announcementId));
+        fetchAnnouncements();
+      } catch (error) {
+        console.error('Error deleting announcement:', error);
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
         {/* Announcements Section */}
         <section className="mb-12">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 px-2 sm:px-0 space-y-3 sm:space-y-0">
             <div className="flex items-center space-x-3">
               <Megaphone className="h-8 w-8 text-blue-500" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">Announcements</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Announcements</h2>
             </div>
             <button
               onClick={() => setShowAnnouncementModal(true)}
@@ -149,23 +160,27 @@ const SeniorDashboard: React.FC = () => {
             </button>
           </div>
           
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 shadow-2xl border border-gray-700 mx-2 sm:mx-0">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-2xl border border-gray-200 dark:border-gray-700 mx-2 sm:mx-0 transition-colors duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg sm:text-xl font-semibold text-white">Recent Updates</h3>
-              <span className="text-sm text-gray-400">{announcements.length} announcements</span>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Recent Updates</h3>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{announcements.length} announcements</span>
             </div>
             
             {announcements.length === 0 ? (
-              <div className="text-center py-8 sm:py-12 text-gray-400">
+              <div className="text-center py-8 sm:py-12 text-gray-600 dark:text-gray-400">
                 <Megaphone className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p className="text-sm sm:text-base">No announcements yet.</p>
               </div>
             ) : (
-              <div className="h-96 sm:h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 pr-2">
+              <div className="h-96 sm:h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 scrollbar-track-gray-100 dark:scrollbar-track-gray-800 pr-2">
                 <div className="space-y-4">
                   {announcements.map(announcement => (
-                    <div key={announcement.id} className="transform transition-all duration-200 hover:scale-[1.02]">
-                      <AnnouncementCard announcement={announcement} />
+                    <div key={announcement.id} className="transform transition-all duration-200">
+                      <AnnouncementCard 
+                        announcement={announcement} 
+                        canEdit={true}
+                        onDelete={handleDeleteAnnouncement}
+                      />
                     </div>
                   ))}
                 </div>
@@ -178,7 +193,7 @@ const SeniorDashboard: React.FC = () => {
         <section className="mb-12">
           <div className="flex items-center space-x-3 mb-4 sm:mb-6 px-2 sm:px-0">
             <Calendar className="h-8 w-8 text-purple-500" />
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">Organizing Section</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Organizing Section</h2>
           </div>
           <div className="grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-4 px-2 sm:px-0">
             {eventTypes.map(({ type, icon: Icon, color, image }) => (
@@ -213,14 +228,14 @@ const SeniorDashboard: React.FC = () => {
         {/* Built By Section */}
         <section className="mb-12">
           <div className="text-center mb-8 sm:mb-12 px-2 sm:px-0">
-            <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">Built By Our Amazing Team</h2>
-            <p className="text-gray-400 text-sm sm:text-lg">Meet the talented individuals who made this project possible</p>
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Built By Our Amazing Team</h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-lg">Meet the talented individuals who made this project possible</p>
           </div>
           <div className="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto px-2 sm:px-0">
             {teamMembers.map((member, index) => (
               <div
                 key={member.name}
-                className="group relative bg-gray-800 rounded-2xl p-4 sm:p-6 hover:bg-gray-750 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
+                className="group relative bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl border border-gray-200 dark:border-transparent"
                 style={{
                   animationDelay: `${index * 0.1}s`
                 }}
@@ -236,9 +251,10 @@ const SeniorDashboard: React.FC = () => {
                   </div>
                   <div className="text-center sm:text-left">
                     <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-400 transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-gray-400 text-sm sm:text-base">{member.role}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">{member.role}</p>
                   </div>
                 </div>
                 <div className="flex justify-center sm:justify-start space-x-3">
@@ -247,9 +263,9 @@ const SeniorDashboard: React.FC = () => {
                       href={member.social.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 sm:p-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors group-hover:scale-110 transform"
+                      className="p-1.5 sm:p-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors group-hover:scale-110 transform"
                     >
-                      <Github className="h-4 w-4 sm:h-5 sm:w-5 text-gray-300 hover:text-white" />
+                      <Github className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" />
                     </a>
                   )}
                   {member.social.linkedin && (
@@ -257,9 +273,9 @@ const SeniorDashboard: React.FC = () => {
                       href={member.social.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 sm:p-2 bg-gray-700 rounded-lg hover:bg-blue-600 transition-colors group-hover:scale-110 transform"
+                      className="p-1.5 sm:p-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-blue-600 transition-colors group-hover:scale-110 transform"
                     >
-                      <Linkedin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-300 hover:text-white" />
+                      <Linkedin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-gray-300 hover:text-white" />
                     </a>
                   )}
                   {member.social.twitter && (
@@ -267,9 +283,9 @@ const SeniorDashboard: React.FC = () => {
                       href={member.social.twitter}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 sm:p-2 bg-gray-700 rounded-lg hover:bg-blue-400 transition-colors group-hover:scale-110 transform"
+                      className="p-1.5 sm:p-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-blue-400 transition-colors group-hover:scale-110 transform"
                     >
-                      <Twitter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-300 hover:text-white" />
+                      <Twitter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-gray-300 hover:text-white" />
                     </a>
                   )}
                   {member.social.instagram && (
@@ -277,9 +293,9 @@ const SeniorDashboard: React.FC = () => {
                       href={member.social.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 sm:p-2 bg-gray-700 rounded-lg hover:bg-pink-600 transition-colors group-hover:scale-110 transform"
+                      className="p-1.5 sm:p-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-pink-600 transition-colors group-hover:scale-110 transform"
                     >
-                      <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-gray-300 hover:text-white" />
+                      <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-gray-300 hover:text-white" />
                     </a>
                   )}
                 </div>
@@ -292,12 +308,12 @@ const SeniorDashboard: React.FC = () => {
         {/* Task Management Section */}
         <section className="mb-12">
           <div className="text-center mb-6 sm:mb-8 px-2 sm:px-0">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Task Management</h2>
-            <p className="text-gray-400">Assign and track task progress</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">Task Management</h2>
+            <p className="text-gray-600 dark:text-gray-400">Assign and track task progress</p>
           </div>
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 mx-2 sm:mx-0">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 mx-2 sm:mx-0 border border-gray-200 dark:border-transparent transition-colors duration-300">
             <div className="text-center">
-              <p className="text-gray-400 mb-4">Navigate to the dedicated Task Management section</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">Navigate to the dedicated Task Management section</p>
               <a
                 href="/tasks"
                 className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
@@ -311,12 +327,12 @@ const SeniorDashboard: React.FC = () => {
         {/* Feedback Section */}
         <section className="mb-12">
           <div className="text-center mb-6 sm:mb-8 px-2 sm:px-0">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Event Feedback</h2>
-            <p className="text-gray-400">View feedback from members</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">Event Feedback</h2>
+            <p className="text-gray-600 dark:text-gray-400">View feedback from members</p>
           </div>
-          <div className="bg-gray-800 rounded-xl p-4 sm:p-6 mx-2 sm:mx-0">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 mx-2 sm:mx-0 border border-gray-200 dark:border-transparent transition-colors duration-300">
             <div className="text-center">
-              <p className="text-gray-400 mb-4">Access detailed feedback analytics</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">Access detailed feedback analytics</p>
               <a
                 href="/feedback"
                 className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base"
@@ -328,49 +344,49 @@ const SeniorDashboard: React.FC = () => {
         </section>
 
         {/* Footer */}
-        <footer className="bg-gray-800 rounded-xl p-4 sm:p-8 mt-12 mx-2 sm:mx-0">
+        <footer className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-8 mt-12 mx-2 sm:mx-0 border border-gray-200 dark:border-transparent transition-colors duration-300">
           <div className="text-center">
             <div className="flex justify-center items-center space-x-3 mb-4">
               <Users className="h-8 w-8 text-blue-500" />
-              <h3 className="text-xl sm:text-2xl font-bold text-white">Society Sphere</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Society Sphere</h3>
             </div>
-            <p className="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">Empowering student societies with modern organization tools</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">Empowering student societies with modern organization tools</p>
             <div className="flex justify-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 sm:p-3 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors"
+                className="p-2 sm:p-3 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >
-                <Github className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                <Github className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-white" />
               </a>
               <a
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 sm:p-3 bg-gray-700 rounded-full hover:bg-blue-600 transition-colors"
+                className="p-2 sm:p-3 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-blue-600 transition-colors"
               >
-                <Linkedin className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                <Linkedin className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-white" />
               </a>
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 sm:p-3 bg-gray-700 rounded-full hover:bg-blue-400 transition-colors"
+                className="p-2 sm:p-3 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-blue-400 transition-colors"
               >
-                <Twitter className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                <Twitter className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-white" />
               </a>
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 sm:p-3 bg-gray-700 rounded-full hover:bg-pink-600 transition-colors"
+                className="p-2 sm:p-3 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-pink-600 transition-colors"
               >
-                <Instagram className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                <Instagram className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-white" />
               </a>
             </div>
-            <div className="border-t border-gray-700 pt-4">
-              <p className="text-gray-500 text-xs sm:text-sm">
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <p className="text-gray-400 dark:text-gray-500 text-xs sm:text-sm">
                 © 2025 Society Organiser. All rights reserved. Built with ❤️ by Happy | Pulkit | Yuvraj | Abhishek.
               </p>
             </div>
