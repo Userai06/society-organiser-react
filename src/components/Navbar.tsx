@@ -46,22 +46,7 @@ const Navbar: React.FC = () => {
               <h1 className="text-lg sm:text-xl font-bold text-white dark:text-white text-gray-900">Society Sphere</h1>
             </Link>
             
-            <div className="hidden lg:flex items-center space-x-1">
-              {navItems.map(({ path, icon: Icon, label }) => (
-                <Link
-                  key={path}
-                  to={path}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    location.pathname === path
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 dark:text-gray-300 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{label}</span>
-                </Link>
-              ))}
-            </div>
+            
           </div>
           
           {currentUser && (
