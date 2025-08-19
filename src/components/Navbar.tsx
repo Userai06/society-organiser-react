@@ -201,7 +201,6 @@ const FeedbackForm: React.FC = () => {
 };
 
 export default FeedbackForm;
-
           </div>
           
           {currentUser && (
