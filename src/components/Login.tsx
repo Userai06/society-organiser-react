@@ -110,7 +110,8 @@ const ROLE_EMAILS = {
     'myadav_be25@thapar.edu',
     'shreyagupta2990@gmail.com',
     'msingla3_be25@thapar.edu',
-    'vaishnavipixy@gmail.com'
+    'vaishnavipixy@gmail.com',
+    'sagarwal1_be25@thapar.edu'
   ]
 };
 
