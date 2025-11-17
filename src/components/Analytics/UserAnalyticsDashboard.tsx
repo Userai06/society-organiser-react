@@ -54,13 +54,22 @@ const UserAnalyticsDashboard: React.FC = () => {
     try {
       const tasksQuery = query(
         collection(db, 'tasks'),
-        where('assignedTo', '==', currentUser.name)
+        where('assignedToEmail', '==', currentUser.email)
       );
       const tasksSnapshot = await getDocs(tasksQuery);
       const tasks: Task[] = tasksSnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data(),
+        title: doc.data().title,
+        description: doc.data().description,
+        eventId: doc.data().eventId,
+        domain: doc.data().domain,
+        priority: doc.data().priority,
+        status: doc.data().status,
+        assignedToEmail: doc.data().assignedToEmail,
+        assignedToName: doc.data().assignedToName,
         dueDate: doc.data().dueDate.toDate(),
+        createdByEmail: doc.data().createdByEmail,
+        createdByName: doc.data().createdByName,
         createdAt: doc.data().createdAt.toDate()
       }));
 
@@ -70,12 +79,17 @@ const UserAnalyticsDashboard: React.FC = () => {
 
       const attendanceQuery = query(
         collection(db, 'attendance'),
-        where('userId', '==', currentUser.uid)
+        where('userEmail', '==', currentUser.email)
       );
       const attendanceSnapshot = await getDocs(attendanceQuery);
       const attendanceRecords: Attendance[] = attendanceSnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data(),
+        eventId: doc.data().eventId,
+        userEmail: doc.data().userEmail,
+        userName: doc.data().userName,
+        status: doc.data().status,
+        markedByEmail: doc.data().markedByEmail,
+        markedByName: doc.data().markedByName,
         markedAt: doc.data().markedAt.toDate()
       }));
 
@@ -85,7 +99,7 @@ const UserAnalyticsDashboard: React.FC = () => {
 
       const feedbackQuery = query(
         collection(db, 'feedback'),
-        where('userId', '==', currentUser.uid)
+        where('userEmail', '==', currentUser.email)
       );
       const feedbackSnapshot = await getDocs(feedbackQuery);
       const totalFeedbacks = feedbackSnapshot.size;

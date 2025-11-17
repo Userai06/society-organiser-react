@@ -39,9 +39,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const userData = userDoc.data();
           setCurrentUser({
             uid: firebaseUser.uid,
-            email: firebaseUser.email!,
+            email: firebaseUser.email!.toLowerCase(),
             role: userData.role,
             name: userData.name,
+            shortName: userData.shortName,
             createdAt: userData.createdAt.toDate()
           });
         }
@@ -55,12 +56,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password: string, role: User['role'], name: string) => {
-    const { user } = await signInWithEmailAndPassword(auth, email, password);
-    
-    // Update user role in Firestore
+    const normalizedEmail = email.toLowerCase();
+    const { user } = await signInWithEmailAndPassword(auth, normalizedEmail, password);
+
     await setDoc(doc(db, 'users', user.uid), {
       name: name || user.email?.split('@')[0] || 'User',
-      email: user.email,
+      email: normalizedEmail,
       role,
       createdAt: new Date()
     }, { merge: true });

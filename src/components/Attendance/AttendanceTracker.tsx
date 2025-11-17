@@ -50,7 +50,10 @@ const AttendanceTracker: React.FC = () => {
       const querySnapshot = await getDocs(q);
       const userList: User[] = querySnapshot.docs.map(doc => ({
         uid: doc.id,
-        ...doc.data(),
+        email: doc.data().email.toLowerCase(),
+        name: doc.data().name,
+        shortName: doc.data().shortName,
+        role: doc.data().role,
         createdAt: doc.data().createdAt.toDate()
       }));
       setUsers(userList);
@@ -68,7 +71,12 @@ const AttendanceTracker: React.FC = () => {
       const querySnapshot = await getDocs(q);
       const attendanceList: Attendance[] = querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data(),
+        eventId: doc.data().eventId,
+        userEmail: doc.data().userEmail,
+        userName: doc.data().userName,
+        status: doc.data().status,
+        markedByEmail: doc.data().markedByEmail,
+        markedByName: doc.data().markedByName,
         markedAt: doc.data().markedAt.toDate()
       }));
       setAttendance(attendanceList);
@@ -77,19 +85,21 @@ const AttendanceTracker: React.FC = () => {
     }
   };
 
-  const markAttendance = async (userId: string, status: 'Present' | 'Absent') => {
+  const markAttendance = async (userEmail: string, userName: string, status: 'Present' | 'Absent') => {
     if (!currentUser || !selectedEventId) return;
 
     setLoading(true);
     try {
       await addDoc(collection(db, 'attendance'), {
         eventId: selectedEventId,
-        userId,
+        userEmail: userEmail.toLowerCase(),
+        userName,
         status,
-        markedBy: currentUser.uid,
+        markedByEmail: currentUser.email,
+        markedByName: currentUser.name,
         markedAt: new Date()
       });
-      
+
       fetchAttendance();
     } catch (error) {
       console.error('Error marking attendance:', error);
@@ -97,8 +107,8 @@ const AttendanceTracker: React.FC = () => {
     setLoading(false);
   };
 
-  const getAttendanceStatus = (userId: string) => {
-    return attendance.find(att => att.userId === userId);
+  const getAttendanceStatus = (userEmail: string) => {
+    return attendance.find(att => att.userEmail === userEmail.toLowerCase());
   };
 
   if (!isUserSenior) {
@@ -116,7 +126,7 @@ const AttendanceTracker: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8 py-8">
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Attendance Tracker</h1>
-      
+
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mb-6 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -142,7 +152,7 @@ const AttendanceTracker: React.FC = () => {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Mark Attendance</h2>
           <div className="space-y-3">
             {users.map(user => {
-              const attendanceRecord = getAttendanceStatus(user.uid);
+              const attendanceRecord = getAttendanceStatus(user.email);
               return (
                 <div key={user.uid} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 border border-gray-200 dark:border-gray-600 rounded-lg space-y-3 sm:space-y-0 transition-colors duration-300">
                   <div className="flex items-center space-x-3">
@@ -158,12 +168,12 @@ const AttendanceTracker: React.FC = () => {
                       <p className="text-sm text-gray-500 dark:text-gray-400">{user.role} • {user.email}</p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2 w-full sm:w-auto justify-end">
                     {attendanceRecord ? (
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        attendanceRecord.status === 'Present' 
-                          ? 'bg-green-100 text-green-800' 
+                        attendanceRecord.status === 'Present'
+                          ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800'
                       }`}>
                         {attendanceRecord.status}
@@ -171,7 +181,7 @@ const AttendanceTracker: React.FC = () => {
                     ) : (
                       <>
                         <button
-                          onClick={() => markAttendance(user.uid, 'Present')}
+                          onClick={() => markAttendance(user.email, user.name, 'Present')}
                           disabled={loading}
                           className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
                         >
@@ -180,7 +190,7 @@ const AttendanceTracker: React.FC = () => {
                           <span className="sm:hidden">P</span>
                         </button>
                         <button
-                          onClick={() => markAttendance(user.uid, 'Absent')}
+                          onClick={() => markAttendance(user.email, user.name, 'Absent')}
                           disabled={loading}
                           className="flex items-center space-x-1 px-2 sm:px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 text-xs sm:text-sm"
                         >

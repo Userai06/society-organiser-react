@@ -76,12 +76,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, canEdit, onEdit, onDelete }) 
         </div>
         <div className="flex items-center space-x-2">
           <User className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-          <span>Created by {task.createdBy}</span>
+          <span>Created by {task.createdByName}</span>
         </div>
-        {task.assignedTo && (
+        {task.assignedToEmail && task.assignedToName && (
           <div className="flex items-center space-x-2">
             <Building className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-            <span>Assigned to {task.assignedTo}</span>
+            <span>Assigned to {task.assignedToName}</span>
           </div>
         )}
       </div>

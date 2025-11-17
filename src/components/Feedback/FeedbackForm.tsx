@@ -41,7 +41,8 @@ const FeedbackForm: React.FC = () => {
     try {
       await addDoc(collection(db, 'feedback'), {
         eventId: selectedEventId,
-        userId: currentUser.uid,
+        userEmail: currentUser.email,
+        userName: currentUser.name,
         rating,
         comments,
         createdAt: new Date()
